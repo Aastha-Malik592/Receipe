@@ -28,33 +28,86 @@ const Signup = () => {
       toast.error(result.payload || "Signup failed");
     }
   };
-  return (
-    <form onSubmit={handleSubmit(handleSignup)}>
-      <h1>Create Account</h1>
+return (
+  <div className="authContainer">
+    <div className="left-side">
+      <img
+        src="https://images.unsplash.com/photo-1556911220-bff31c812dba"
+        alt="Recipe"
+      />
+    </div>
 
-      <p>Join us today</p>
+    <div className="right-side">
+      <div className="authBox">
+        <form onSubmit={handleSubmit(handleSignup)}>
+          <h1>Create Account</h1>
 
-      <input type="text" placeholder="Name" {...register("name")} />
+          <p>Join us today</p>
 
-      {errors.name && <p>{errors.name.message}</p>}
+          <input
+            type="text"
+            placeholder="Name"
+            {...register("name")}
+          />
 
-      <input type="email" placeholder="Email" {...register("email")} />
+          {errors.name && (
+            <p className="error">
+              {errors.name.message}
+            </p>
+          )}
 
-      {errors.email && <p>{errors.email.message}</p>}
+          <input
+            type="email"
+            placeholder="Email"
+            {...register("email")}
+          />
 
-      <input type="password" placeholder="Password" {...register("password")} />
+          {errors.email && (
+            <p className="error">
+              {errors.email.message}
+            </p>
+          )}
 
-      {errors.password && <p>{errors.password.message}</p>}
+          <input
+            type="password"
+            placeholder="Password"
+            {...register("password")}
+          />
 
-      <button className="auth-btn" type="submit">
-        Signup
-      </button>
+          {errors.password && (
+            <p className="error">
+              {errors.password.message}
+            </p>
+          )}
 
-      <div className="bottom-link">
-        Already have an account? <Link to="/login">Login</Link>
+          <button
+            className="auth-btn"
+            type="submit"
+          >
+            Sign Up
+          </button>
+
+          <div className="bottom-link">
+            Already have an account?{" "}
+            <Link to="/login">
+              Login
+            </Link>
+          </div>
+        </form>
       </div>
-    </form>
-  );
+    </div>
+  </div>
+);
+
+    
+         
+     
+
+    
+
+
+
+   
 };
 
 export default Signup;
