@@ -9,7 +9,6 @@ import Home from "./pages/home";
 
 import CreateRecipe from "./pages/create-recipe";
 
-import EditRecipe from "./pages/edit-recipe";
 
 import FavoriteRecipes from "./pages/favorite-recipes";
 
@@ -46,15 +45,7 @@ const Router = createBrowserRouter([
     ),
   },
 
-  {
-    path: "/edit-recipe/:id",
-
-    element: (
-      <ProtectedRoute>
-        <EditRecipe />
-      </ProtectedRoute>
-    ),
-  },
+  
 
   {
     path: "/favorites",
