@@ -12,12 +12,12 @@ const authSlice = createSlice({
   initialState,
 
   reducers: {
-   logout: (state) => {
-  state.token = null;
-  state.user = null;
+    logout: (state) => {
+      state.token = null;
+      state.user = null;
 
-  localStorage.removeItem("token");
-},
+      localStorage.removeItem("token");
+    },
   },
 
   extraReducers: (builder) => {
@@ -26,13 +26,13 @@ const authSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-     .addCase(loginThunk.fulfilled, (state, action) => {
-  state.loading = false;
+      .addCase(loginThunk.fulfilled, (state, action) => {
+        state.loading = false;
 
-  state.token = action.payload.token;
+        state.token = action.payload.token;
 
-  localStorage.setItem("token", action.payload.token);
-})
+        localStorage.setItem("token", action.payload.token);
+      })
 
       .addCase(loginThunk.rejected, (state, action) => {
         state.loading = false;

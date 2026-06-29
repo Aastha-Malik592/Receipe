@@ -3,7 +3,6 @@ import axios from "axios";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
-
 const getToken = (state) => {
   console.log("Auth State:", state.auth);
   console.log("Token:", state.auth.token);
@@ -39,7 +38,7 @@ export const getRecipesThunk = createAsyncThunk(
   async ({ page = 1, limit = 6 } = {}, { rejectWithValue, getState }) => {
     try {
       const response = await axios.get(
-       `${apiUrl}/api/recipes?page=${page}&limit=${limit}`,
+        `${apiUrl}/api/recipes?page=${page}&limit=${limit}`,
 
         {
           headers: {

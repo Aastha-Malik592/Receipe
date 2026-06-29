@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-
 import Navbar from "../components/navbar";
 import RecipeCard from "../components/recipe-card";
 import { useNavigate } from "react-router-dom";
-
 
 import Modal from "../components/modal";
 import RecipeForm from "../components/recipe-form";
@@ -17,137 +15,109 @@ import {
 import toast from "react-hot-toast";
 const Home = () => {
   const dispatch = useDispatch();
-const navigate = useNavigate();
-  const {
-  recipes,
-  loading,
-  totalPages,
-} = useSelector(
-  (state) => state.recipe
-);
+  const navigate = useNavigate();
+  const { recipes, loading, totalPages } = useSelector((state) => state.recipe);
   const [isOpen, setIsOpen] = useState(false);
 
-const [form, setForm] = useState({
-  title: "",
-  description: "",
-  ingredients: "",
-  category: "",
-});
+  const [form, setForm] = useState({
+    title: "",
+    description: "",
+    ingredients: "",
+    category: "",
+  });
 
-const [image, setImage] = useState(null);
-const [editingRecipe, setEditingRecipe] = useState(null);
+  const [image, setImage] = useState(null);
+  const [editingRecipe, setEditingRecipe] = useState(null);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
   const [page, setPage] = useState(1);
-const limit = 6;
-  const [showFavorites, setShowFavorites] =
-    useState(false);
+  const limit = 6;
+  const [showFavorites, setShowFavorites] = useState(false);
 
- useEffect(() => {
-  dispatch(
-    getRecipesThunk({
-      page,
-      limit,
-    })
-  );
-}, [dispatch, page]);
-useEffect(() => {
-  setPage(1);
-}, [search, category, showFavorites]);
-const handleSubmitRecipe = async (e) => {
-  e.preventDefault();
-
-  const formData = new FormData();
-
-  formData.append("title", form.title);
-  formData.append("description", form.description);
-
-  formData.append(
-    "ingredients",
-    JSON.stringify(
-  form.ingredients
-    .split(",")
-    .map((item) => item.trim())
-)
-  );
-
-  formData.append("category", form.category);
-
-  if (image) {
-    formData.append("image", image);
-  }
-
-  let result;
-
-  if (editingRecipe) {
-    result = await dispatch(
-      updateRecipeThunk({
-        id: editingRecipe._id,
-        data: formData,
-      })
+  useEffect(() => {
+    dispatch(
+      getRecipesThunk({
+        page,
+        limit,
+      }),
     );
-  } else {
-    result = await dispatch(
-      createRecipeThunk(formData)
-    );
-  }
+  }, [dispatch, page]);
+  useEffect(() => {
+    setPage(1);
+  }, [search, category, showFavorites]);
+  const handleSubmitRecipe = async (e) => {
+    e.preventDefault();
 
-  if (
-    createRecipeThunk.fulfilled.match(result) ||
-    updateRecipeThunk.fulfilled.match(result)
-  ) {
-    toast.success(
-      editingRecipe
-        ? "Recipe Updated"
-        : "Recipe Created"
+    const formData = new FormData();
+
+    formData.append("title", form.title);
+    formData.append("description", form.description);
+
+    formData.append(
+      "ingredients",
+      JSON.stringify(form.ingredients.split(",").map((item) => item.trim())),
     );
 
-  dispatch(
-  getRecipesThunk({
-    page,
-    limit,
-  })
-);
+    formData.append("category", form.category);
 
-    setIsOpen(false);
-setEditingRecipe(null);
+    if (image) {
+      formData.append("image", image);
+    }
 
-setForm({
-  title: "",
-  description: "",
-  ingredients: "",
-  category: "",
-});
+    let result;
 
-setImage(null);
+    if (editingRecipe) {
+      result = await dispatch(
+        updateRecipeThunk({
+          id: editingRecipe._id,
+          data: formData,
+        }),
+      );
+    } else {
+      result = await dispatch(createRecipeThunk(formData));
+    }
 
-   
-  } else {
-    toast.error(result.payload);
-  }
-};
+    if (
+      createRecipeThunk.fulfilled.match(result) ||
+      updateRecipeThunk.fulfilled.match(result)
+    ) {
+      toast.success(editingRecipe ? "Recipe Updated" : "Recipe Created");
+
+      dispatch(
+        getRecipesThunk({
+          page,
+          limit,
+        }),
+      );
+
+      setIsOpen(false);
+      setEditingRecipe(null);
+
+      setForm({
+        title: "",
+        description: "",
+        ingredients: "",
+        category: "",
+      });
+
+      setImage(null);
+    } else {
+      toast.error(result.payload);
+    }
+  };
   const filteredRecipes = recipes.filter((recipe) => {
     const matchesSearch = recipe.title
       .toLowerCase()
       .includes(search.toLowerCase());
-       const matchesCategory =
-      category === "" ||
-      recipe.category === category;
+    const matchesCategory = category === "" || recipe.category === category;
 
-    const matchesFavorite =
-      !showFavorites ||
-      recipe.isFavorite;
+    const matchesFavorite = !showFavorites || recipe.isFavorite;
 
-    return (
-      matchesSearch &&
-      matchesCategory &&
-      matchesFavorite
-    );
+    return matchesSearch && matchesCategory && matchesFavorite;
   });
 
   return (
     <>
-
       <Navbar
         search={search}
         setSearch={setSearch}
@@ -158,7 +128,6 @@ setImage(null);
       />
 
       <div className="home-container">
-
         <div className="home-banner">
           <img
             src="https://images.unsplash.com/photo-1504674900247-0877df9cc836"
@@ -167,118 +136,93 @@ setImage(null);
         </div>
 
         <div className="home-header">
-
           <div>
             <h1>Recipe Management</h1>
 
-            <p>
-              Create, manage and organize your recipes
-            </p>
+            <p>Create, manage and organize your recipes</p>
           </div>
 
-        
-<button
-  className="home-btn"
-  onClick={() => navigate("/create-recipe")}
->
-  Create Recipe
-</button>
-
- 
+          <button
+            className="home-btn"
+            onClick={() => navigate("/create-recipe")}
+          >
+            Create Recipe
+          </button>
         </div>
 
         {loading ? (
           <p>Loading...</p>
         ) : filteredRecipes.length === 0 ? (
-          <p className="no-recipe">
-            No recipes found
-          </p>
+          <p className="no-recipe">No recipes found</p>
         ) : (
           <div className="recipe-grid">
             {filteredRecipes.map((recipe) => (
-             <RecipeCard
-  key={recipe._id}
-  recipe={recipe}
-  onEdit={(recipe) => {
-    setEditingRecipe(recipe);
+              <RecipeCard
+                key={recipe._id}
+                recipe={recipe}
+                onEdit={(recipe) => {
+                  setEditingRecipe(recipe);
 
-    setForm({
-      title: recipe.title,
-      description: recipe.description,
-      ingredients: recipe.ingredients.join(", "),
-      category: recipe.category,
-    });
+                  setForm({
+                    title: recipe.title,
+                    description: recipe.description,
+                    ingredients: recipe.ingredients.join(", "),
+                    category: recipe.category,
+                  });
 
-    setImage(null);
+                  setImage(null);
 
-    setIsOpen(true);
-  }}
-/>
+                  setIsOpen(true);
+                }}
+              />
             ))}
           </div>
-          
         )}
         <div className="pagination">
-  <button
-    disabled={page === 1}
-    onClick={() => setPage(page - 1)}
-  >
-    Previous
-  </button>
+          <button disabled={page === 1} onClick={() => setPage(page - 1)}>
+            Previous
+          </button>
 
-  <span>
-    Page {page} of {totalPages}
-  </span>
+          <span>
+            Page {page} of {totalPages}
+          </span>
 
-  <button
-   disabled={page >= totalPages || totalPages === 0}
-    onClick={() => setPage(page + 1)}
-  >
-    Next
-  </button>
-</div>
-
-
+          <button
+            disabled={page >= totalPages || totalPages === 0}
+            onClick={() => setPage(page + 1)}
+          >
+            Next
+          </button>
+        </div>
       </div>
-     
-<Modal
-  isOpen={isOpen}
-  onClose={() => {
-    setIsOpen(false);
 
-    setEditingRecipe(null);
+      <Modal
+        isOpen={isOpen}
+        onClose={() => {
+          setIsOpen(false);
 
-    setForm({
-      title: "",
-      description: "",
-      ingredients: "",
-      category: "",
-    });
+          setEditingRecipe(null);
 
-    setImage(null);
-  }}
-  title={
-    editingRecipe
-      ? "Edit Recipe"
-      : "Create Recipe"
-  }
->
-  <RecipeForm
-    form={form}
-    setForm={setForm}
-    image={image}
-    setImage={setImage}
-    handleSubmit={handleSubmitRecipe}
-    buttonText={
-      editingRecipe
-        ? "Update Recipe"
-        : "Create Recipe"
-    }
-  />
-</Modal>
-     
+          setForm({
+            title: "",
+            description: "",
+            ingredients: "",
+            category: "",
+          });
 
-    
+          setImage(null);
+        }}
+        title={editingRecipe ? "Edit Recipe" : "Create Recipe"}
+      >
+        <RecipeForm
+          form={form}
+          setForm={setForm}
+          image={image}
+          setImage={setImage}
+          handleSubmit={handleSubmitRecipe}
+          buttonText={editingRecipe ? "Update Recipe" : "Create Recipe"}
+        />
+      </Modal>
     </>
   );
 };

@@ -9,7 +9,6 @@ import Home from "./pages/home";
 
 import CreateRecipe from "./pages/create-recipe";
 
-
 import FavoriteRecipes from "./pages/favorite-recipes";
 
 import ProtectedRoute from "./layouts/protected-route";
@@ -44,8 +43,6 @@ const Router = createBrowserRouter([
       </ProtectedRoute>
     ),
   },
-
-  
 
   {
     path: "/favorites",

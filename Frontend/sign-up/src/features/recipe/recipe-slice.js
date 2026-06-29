@@ -41,17 +41,17 @@ const recipeSlice = createSlice({
         state.loading = true;
       })
 
-     .addCase(getRecipesThunk.fulfilled, (state, action) => {
-  state.loading = false;
+      .addCase(getRecipesThunk.fulfilled, (state, action) => {
+        state.loading = false;
 
-  state.recipes = action.payload.recipes;
+        state.recipes = action.payload.recipes;
 
-  state.page = action.payload.page;
+        state.page = action.payload.page;
 
-  state.totalPages = action.payload.totalPages;
+        state.totalPages = action.payload.totalPages;
 
-  state.total = action.payload.total;
-})
+        state.total = action.payload.total;
+      })
 
       .addCase(getRecipesThunk.rejected, (state, action) => {
         state.loading = false;

@@ -15,7 +15,7 @@ const Navbar = ({
   const navigate = useNavigate();
 
   const handleLogout = () => {
-     localStorage.removeItem("token");
+    localStorage.removeItem("token");
     dispatch(logout());
     navigate("/login");
   };
@@ -31,10 +31,7 @@ const Navbar = ({
         onChange={(e) => setSearch(e.target.value)}
       />
 
-      <select
-        value={category}
-        onChange={(e) => setCategory(e.target.value)}
-      >
+      <select value={category} onChange={(e) => setCategory(e.target.value)}>
         <option value="">All Categories</option>
         <option value="Breakfast">Breakfast</option>
         <option value="Lunch">Lunch</option>
@@ -49,10 +46,7 @@ const Navbar = ({
         ⭐ Favorites
       </button>
 
-      <button
-        className="logout-btn"
-        onClick={handleLogout}
-      >
+      <button className="logout-btn" onClick={handleLogout}>
         Logout
       </button>
     </nav>
