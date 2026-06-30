@@ -1,7 +1,8 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-
+import "./recipecard.css";
 import toast from "react-hot-toast";
+const apiUrl = import.meta.env.VITE_API_URL;
 import {
   deleteRecipeThunk,
   favoriteRecipeThunk,
@@ -21,25 +22,48 @@ const RecipeCard = ({ recipe, onEdit }) => {
     }
   };
 
-  const handleFavorite = async () => {
-    const result = await dispatch(favoriteRecipeThunk(recipe._id));
+  
+ const handleFavorite = async () => {
+  const result = await dispatch(
+    favoriteRecipeThunk(recipe._id)
+  );
 
-    if (favoriteRecipeThunk.fulfilled.match(result)) {
-      toast.success("Favorite updated");
+  console.log("Favorite Result:", result);
+  console.log("Payload:", result.payload);
+console.log(
+  "isFavorite:",
+  result.payload.recipe.isFavorite
+);
 
-      dispatch(getRecipesThunk());
-    } else {
-      toast.error(result.payload);
-    }
-  };
-
+ if (favoriteRecipeThunk.fulfilled.match(result)) {
+  toast.success("Favorite Updated");
+}
+  else {
+    toast.error(result.payload);
+  }
+};
+console.log(recipe.image);
+console.log(recipe)
   return (
     <div className="recipe-card">
-      <div className="recipe-image">
-        <button className="favorite-icon" onClick={handleFavorite}>
-          {recipe.isFavorite ? "❤️" : "🤍"}
-        </button>
-      </div>
+    <div className="recipe-image">
+  {recipe.image ? (
+    <img
+       src={`${apiUrl}/${recipe.image}`}
+      alt={recipe.title}
+      className="recipe-img"
+    />
+  ) : (
+    <div className="image-placeholder">No Image</div>
+  )}
+
+  <button
+    className="favorite-icon"
+    onClick={handleFavorite}
+  >
+    {recipe.isFavorite ? "❤️" : "🤍"}
+  </button>
+</div>
 
       <div className="recipe-content">
         <h3>{recipe.title}</h3>

@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDispatch } from "react-redux";
 import toast from "react-hot-toast";
-
+import "./login.css";
 import { loginThunk } from "../features/auth/auth-thunk";
 import { loginSchema } from "../features/auth/auth-schema";
 

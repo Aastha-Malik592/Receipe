@@ -31,28 +31,39 @@ export const createRecipeThunk = createAsyncThunk(
     }
   },
 );
-
 export const getRecipesThunk = createAsyncThunk(
   "recipe/get",
 
-  async ({ page = 1, limit = 6 } = {}, { rejectWithValue, getState }) => {
+  async (
+    {
+      page = 1,
+      limit = 6,
+      search = "",
+      category = "",
+      favorites = false,
+    } = {},
+    { rejectWithValue, getState }
+  ) => {
     try {
       const response = await axios.get(
-        `${apiUrl}/api/recipes?page=${page}&limit=${limit}`,
-
+        `${apiUrl}/api/recipes?page=${page}&limit=${limit}&search=${search}&category=${category}&favorites=${favorites}`,
         {
           headers: {
             Authorization: `Bearer ${getToken(getState())}`,
           },
-        },
+        }
       );
 
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message);
     }
-  },
+  }
 );
+
+     
+
+
 
 export const deleteRecipeThunk = createAsyncThunk(
   "recipe/delete",

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import Navbar from "../components/navbar";
 import RecipeCard from "../components/recipe-card";
-import { useNavigate } from "react-router-dom";
+import "./Home.css";
 
 import Modal from "../components/modal";
 import RecipeForm from "../components/recipe-form";
@@ -15,8 +15,9 @@ import {
 import toast from "react-hot-toast";
 const Home = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+
   const { recipes, loading, totalPages } = useSelector((state) => state.recipe);
+ 
   const [isOpen, setIsOpen] = useState(false);
 
   const [form, setForm] = useState({
@@ -34,14 +35,17 @@ const Home = () => {
   const limit = 6;
   const [showFavorites, setShowFavorites] = useState(false);
 
-  useEffect(() => {
-    dispatch(
-      getRecipesThunk({
-        page,
-        limit,
-      }),
-    );
-  }, [dispatch, page]);
+useEffect(() => {
+  dispatch(
+    getRecipesThunk({
+      page,
+      limit,
+      search,
+      category,
+      favorites: showFavorites,
+    })
+  );
+}, [dispatch, page, search, category, showFavorites]);
   useEffect(() => {
     setPage(1);
   }, [search, category, showFavorites]);
@@ -83,12 +87,16 @@ const Home = () => {
     ) {
       toast.success(editingRecipe ? "Recipe Updated" : "Recipe Created");
 
-      dispatch(
-        getRecipesThunk({
-          page,
-          limit,
-        }),
-      );
+  dispatch(
+  getRecipesThunk({
+    page,
+    limit,
+    search,
+    category,
+    favorites: showFavorites,
+  })
+);
+
 
       setIsOpen(false);
       setEditingRecipe(null);
@@ -105,16 +113,8 @@ const Home = () => {
       toast.error(result.payload);
     }
   };
-  const filteredRecipes = recipes.filter((recipe) => {
-    const matchesSearch = recipe.title
-      .toLowerCase()
-      .includes(search.toLowerCase());
-    const matchesCategory = category === "" || recipe.category === category;
 
-    const matchesFavorite = !showFavorites || recipe.isFavorite;
 
-    return matchesSearch && matchesCategory && matchesFavorite;
-  });
 
   return (
     <>
@@ -142,21 +142,35 @@ const Home = () => {
             <p>Create, manage and organize your recipes</p>
           </div>
 
-          <button
-            className="home-btn"
-            onClick={() => navigate("/create-recipe")}
-          >
-            Create Recipe
-          </button>
+          
+ <button
+  className="home-btn"
+  onClick={() => {
+    setEditingRecipe(null);
+
+    setForm({
+      title: "",
+      description: "",
+      ingredients: "",
+      category: "",
+    });
+
+    setImage(null);
+
+    setIsOpen(true);
+  }}
+>
+  Create Recipe
+</button>
         </div>
 
         {loading ? (
           <p>Loading...</p>
-        ) : filteredRecipes.length === 0 ? (
+        ) : recipes.length === 0 ? (
           <p className="no-recipe">No recipes found</p>
         ) : (
           <div className="recipe-grid">
-            {filteredRecipes.map((recipe) => (
+            {recipes.map((recipe) => (
               <RecipeCard
                 key={recipe._id}
                 recipe={recipe}
@@ -178,22 +192,28 @@ const Home = () => {
             ))}
           </div>
         )}
-        <div className="pagination">
-          <button disabled={page === 1} onClick={() => setPage(page - 1)}>
-            Previous
-          </button>
+      <div className="pagination">
+  <button
+    className="page-btn"
+    disabled={page === 1}
+    onClick={() => setPage(page - 1)}
+  >
+    ← Previous
+  </button>
 
-          <span>
-            Page {page} of {totalPages}
-          </span>
+  <span className="page-number">
+    {page} / {totalPages}
+  </span>
 
-          <button
-            disabled={page >= totalPages || totalPages === 0}
-            onClick={() => setPage(page + 1)}
-          >
-            Next
-          </button>
-        </div>
+  <button
+    className="page-btn"
+    disabled={page >= totalPages}
+    onClick={() => setPage(page + 1)}
+  >
+    Next →
+  </button>
+</div>
+    
       </div>
 
       <Modal
@@ -215,6 +235,7 @@ const Home = () => {
         title={editingRecipe ? "Edit Recipe" : "Create Recipe"}
       >
         <RecipeForm
+        
           form={form}
           setForm={setForm}
           image={image}

@@ -7,7 +7,7 @@ import Signup from "./pages/signup";
 
 import Home from "./pages/home";
 
-import CreateRecipe from "./pages/create-recipe";
+
 
 import FavoriteRecipes from "./pages/favorite-recipes";
 
@@ -34,15 +34,7 @@ const Router = createBrowserRouter([
     ),
   },
 
-  {
-    path: "/create-recipe",
-
-    element: (
-      <ProtectedRoute>
-        <CreateRecipe />
-      </ProtectedRoute>
-    ),
-  },
+ 
 
   {
     path: "/favorites",

@@ -6,7 +6,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signupSchema } from "../features/auth/auth-schema";
-
+import "./signup.css";
 const Signup = () => {
   const navigate = useNavigate();
   const {

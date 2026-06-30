@@ -1,0 +1,41 @@
+.recipe-form{
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+}
+
+.recipe-form input,
+.recipe-form textarea,
+.recipe-form select{
+    width:100%;
+    padding:12px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    font-size:15px;
+}
+
+.recipe-form textarea{
+    min-height:120px;
+    resize:none;
+}
+
+.recipe-preview{
+    width:100%;
+    height:220px;
+    object-fit:cover;
+    border-radius:10px;
+}
+
+.recipe-form button{
+    background:#ff6b35;
+    color:white;
+    border:none;
+    padding:12px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:16px;
+}
+
+.recipe-form button:hover{
+    background:#e65a2c;
+}

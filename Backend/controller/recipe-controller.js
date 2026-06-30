@@ -33,12 +33,23 @@ exports.createRecipe = async (req, res) => {
 };
 
 exports.getRecipes = async (req, res) => {
-  try {
-    const { search, category, page = 1, limit = 5 } = req.query;
+  
 
-    let query = {
+  try {
+const {
+  page = 1,
+  limit = 6,
+  search = "",
+  category = "",
+  favorites,
+} = req.query;
+
+    const query = {
       userId: req.user._id,
     };
+    if (favorites === "true") {
+  query.isFavorite = true;
+}
 
     if (search) {
       query.title = {
@@ -51,26 +62,18 @@ exports.getRecipes = async (req, res) => {
       query.category = category;
     }
 
-    const recipes = await Recipe.find(query)
-
-      .skip((page - 1) * limit)
-
-      .limit(Number(limit))
-
-      .populate("category");
-
     const total = await Recipe.countDocuments(query);
+
+    const recipes = await Recipe.find(query)
+      .skip((page - 1) * limit)
+      .limit(Number(limit));
 
     res.status(200).json({
       success: true,
-
       recipes,
-
-      total,
-
       page: Number(page),
-
       totalPages: Math.ceil(total / limit),
+      total,
     });
   } catch (error) {
     res.status(500).json({
@@ -103,7 +106,7 @@ exports.getRecipeById = async (req, res) => {
   }
 };
 
-// UPDATE RECIPE
+
 
 exports.updateRecipe = async (req, res) => {
   try {
@@ -149,7 +152,7 @@ exports.updateRecipe = async (req, res) => {
   }
 };
 
-// DELETE RECIPE
+
 
 exports.deleteRecipe = async (req, res) => {
   try {
@@ -175,7 +178,6 @@ exports.deleteRecipe = async (req, res) => {
   }
 };
 
-// FAVORITE TOGGLE
 
 exports.favoriteRecipe = async (req, res) => {
   try {

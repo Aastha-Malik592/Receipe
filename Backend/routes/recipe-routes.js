@@ -7,8 +7,8 @@ const authMiddleware = require("../middleware/auth-middleware");
 const upload = require("../middleware/upload");
 
 const {
-  createRecipe,
-
+  
+ createRecipe,
   getRecipes,
 
   getRecipeById,
@@ -38,6 +38,13 @@ router.get(
   authMiddleware,
 
   getRecipes,
+);
+router.get(
+  "/favorites",
+
+  authMiddleware,
+
+  getFavoriteRecipes,
 );
 
 router.get(
@@ -74,12 +81,6 @@ router.patch(
   favoriteRecipe,
 );
 
-router.get(
-  "/favorites",
 
-  authMiddleware,
-
-  getFavoriteRecipes,
-);
 
 module.exports = router;
