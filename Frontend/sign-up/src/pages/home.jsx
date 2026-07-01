@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
+import { useDebounce } from "use-debounce";
 import Navbar from "../components/navbar";
 import RecipeCard from "../components/recipe-card";
 import "./Home.css";
@@ -30,6 +30,7 @@ const Home = () => {
   const [image, setImage] = useState(null);
   const [editingRecipe, setEditingRecipe] = useState(null);
   const [search, setSearch] = useState("");
+  const [debouncedSearch] = useDebounce(search, 500);
   const [category, setCategory] = useState("");
   const [page, setPage] = useState(1);
   const limit = 6;
@@ -40,33 +41,36 @@ useEffect(() => {
     getRecipesThunk({
       page,
       limit,
-      search,
+      search: debouncedSearch,
       category,
       favorites: showFavorites,
     })
   );
-}, [dispatch, page, search, category, showFavorites]);
+}, [dispatch, page, debouncedSearch, category, showFavorites]);
   useEffect(() => {
     setPage(1);
   }, [search, category, showFavorites]);
-  const handleSubmitRecipe = async (e) => {
-    e.preventDefault();
+const handleSubmitRecipe = async (data) => {
+  const formData = new FormData();
 
-    const formData = new FormData();
+  formData.append("title", data.title);
+  formData.append("description", data.description);
+  formData.append(
+    "ingredients",
+    JSON.stringify(
+      data.ingredients.split(",").map((item) => item.trim())
+    )
+  );
+  formData.append("category", data.category);
 
-    formData.append("title", form.title);
-    formData.append("description", form.description);
+  if (image) {
+    formData.append("image", image);
+  }
 
-    formData.append(
-      "ingredients",
-      JSON.stringify(form.ingredients.split(",").map((item) => item.trim())),
-    );
+  
 
-    formData.append("category", form.category);
 
-    if (image) {
-      formData.append("image", image);
-    }
+  
 
     let result;
 
@@ -101,12 +105,8 @@ useEffect(() => {
       setIsOpen(false);
       setEditingRecipe(null);
 
-      setForm({
-        title: "",
-        description: "",
-        ingredients: "",
-        category: "",
-      });
+    
+
 
       setImage(null);
     } else {

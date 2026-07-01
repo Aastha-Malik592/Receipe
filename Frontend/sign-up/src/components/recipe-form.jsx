@@ -1,55 +1,47 @@
-import React from "react";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import "./recipeform.css";
 
 const RecipeForm = ({
   form,
-  setForm,
   image,
   setImage,
   handleSubmit,
   buttonText,
 }) => {
-  const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
-  };
+  const {
+    register,
+    handleSubmit: submitForm,
+    reset,
+  } = useForm({
+    defaultValues: form,
+  });
+
+  useEffect(() => {
+    reset(form);
+  }, [form, reset]);
 
   return (
-    <form className="recipe-form" onSubmit={handleSubmit}>
+    <form
+      className="recipe-form"
+      onSubmit={submitForm(handleSubmit)}
+    >
       <input
-        type="text"
-        name="title"
+        {...register("title")}
         placeholder="Recipe Title"
-        value={form.title}
-        onChange={handleChange}
-        required
       />
 
       <textarea
-        name="description"
+        {...register("description")}
         placeholder="Description"
-        value={form.description}
-        onChange={handleChange}
-        required
       />
 
       <input
-        type="text"
-        name="ingredients"
+        {...register("ingredients")}
         placeholder="Ingredients (comma separated)"
-        value={form.ingredients}
-        onChange={handleChange}
-        required
       />
 
-      <select
-        name="category"
-        value={form.category}
-        onChange={handleChange}
-        required
-      >
+      <select {...register("category")}>
         <option value="">Select Category</option>
         <option value="Breakfast">Breakfast</option>
         <option value="Lunch">Lunch</option>

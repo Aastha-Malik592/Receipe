@@ -1,22 +1,25 @@
-import React from "react";
+import * as Dialog from "@radix-ui/react-dialog";
+import "./modal.css";
 
 const Modal = ({ isOpen, onClose, title, children }) => {
-  if (!isOpen) return null;
-
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-box" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-header">
-          <h2>{title}</h2>
+    <Dialog.Root open={isOpen} onOpenChange={onClose}>
+      <Dialog.Portal>
+        <Dialog.Overlay className="dialog-overlay" />
 
-          <button className="close-btn" onClick={onClose}>
-            ✕
-          </button>
-        </div>
+        <Dialog.Content className="dialog-content">
+          <Dialog.Title className="dialog-title">
+            {title}
+          </Dialog.Title>
 
-        {children}
-      </div>
-    </div>
+          {children}
+
+          <Dialog.Close asChild>
+            <button className="close-btn">✕</button>
+          </Dialog.Close>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
   );
 };
 

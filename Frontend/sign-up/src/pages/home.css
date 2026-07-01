@@ -32,7 +32,7 @@
 
   opacity: 0.12;
 
-  z-index: 0;
+ 
 }
 
 .home-header {
@@ -54,10 +54,10 @@ align-items: center;
 
   position: relative;
 
-  z-index: 1;
 
-  animation: fade 0.7s ease;
-}
+
+   animation: fade 0.7s ease;
+} 
 .home-header h1 {
   color: #4f46e5;
 
@@ -103,9 +103,17 @@ border: none;
   border-radius: 20px;
  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
 }
+ .recipe-grid {
+  display: grid;
 
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
 
+  gap: 25px;
 
+  position: relative;
+
+  
+} 
 .pagination{
     display:flex;
     justify-content:center;
