@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import "./recipecard.css";
-import toast from "react-hot-toast";
+
 const apiUrl = import.meta.env.VITE_API_URL;
 import {
   deleteRecipeThunk,
@@ -13,30 +13,12 @@ const RecipeCard = ({ recipe, onEdit }) => {
   const dispatch = useDispatch();
 
   const handleDelete = async () => {
-    const result = await dispatch(deleteRecipeThunk(recipe._id));
-
-    if (deleteRecipeThunk.fulfilled.match(result)) {
-      toast.success("Recipe deleted");
-    } else {
-      toast.error(result.payload);
-    }
+    await dispatch(deleteRecipeThunk(recipe._id));
   };
-
   const handleFavorite = async () => {
-    const result = await dispatch(favoriteRecipeThunk(recipe._id));
-
-    console.log("Favorite Result:", result);
-    console.log("Payload:", result.payload);
-    console.log("isFavorite:", result.payload.recipe.isFavorite);
-
-    if (favoriteRecipeThunk.fulfilled.match(result)) {
-      toast.success("Favorite Updated");
-    } else {
-      toast.error(result.payload);
-    }
+    await dispatch(favoriteRecipeThunk(recipe._id));
   };
-  console.log(recipe.image);
-  console.log(recipe);
+
   return (
     <div className="recipe-card">
       <div className="recipe-image">

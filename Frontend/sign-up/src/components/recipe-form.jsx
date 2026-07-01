@@ -4,15 +4,15 @@ import "./recipeform.css";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { recipeSchema } from "../features/recipe/recipe-schema";
 const RecipeForm = ({ form, image, setImage, handleSubmit, buttonText }) => {
- const {
-  register,
-  handleSubmit: submitForm,
-  reset,
-  formState: { errors },
-} = useForm({
-  resolver: zodResolver(recipeSchema),
-  defaultValues: form,
-});
+  const {
+    register,
+    handleSubmit: submitForm,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(recipeSchema),
+    defaultValues: form,
+  });
 
   useEffect(() => {
     reset(form);
@@ -22,22 +22,16 @@ const RecipeForm = ({ form, image, setImage, handleSubmit, buttonText }) => {
     <form className="recipe-form" onSubmit={submitForm(handleSubmit)}>
       <input {...register("title")} placeholder="Recipe Title" />
 
-<p className="error">
-  {errors.title?.message}
-</p>
+      <p className="error">{errors.title?.message}</p>
 
       <textarea {...register("description")} placeholder="Description" />
-<p className="error">
-  {errors.description?.message}
-</p>
+      <p className="error">{errors.description?.message}</p>
       <input
         {...register("ingredients")}
         placeholder="Ingredients (comma separated)"
       />
 
-<p className="error">
-  {errors.ingredients?.message}
-</p>
+      <p className="error">{errors.ingredients?.message}</p>
 
       <select {...register("category")}>
         <option value="">Select Category</option>
@@ -46,9 +40,7 @@ const RecipeForm = ({ form, image, setImage, handleSubmit, buttonText }) => {
         <option value="Dinner">Dinner</option>
         <option value="Dessert">Dessert</option>
       </select>
-<p className="error">
-  {errors.category?.message}
-</p>
+      <p className="error">{errors.category?.message}</p>
       <input
         type="file"
         accept="image/*"

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useDebounce } from "use-debounce";
 import Navbar from "../components/navbar";
 import RecipeCard from "../components/recipe-card";
-import "./Home.css";
+import "./home.css";
 
 import Modal from "../components/modal";
 import RecipeForm from "../components/recipe-form";
@@ -50,45 +50,40 @@ const Home = () => {
   useEffect(() => {
     setPage(1);
   }, [search, category, showFavorites]);
- const handleSubmitRecipe = async (data) => {
-  const formData = new FormData();
+  const handleSubmitRecipe = async (data) => {
+    const formData = new FormData();
 
-  formData.append("title", data.title);
-  formData.append("description", data.description);
+    formData.append("title", data.title);
+    formData.append("description", data.description);
 
-  formData.append(
-    "ingredients",
-    JSON.stringify(
-      data.ingredients.split(",").map((item) => item.trim())
-    )
-  );
-
-  formData.append("category", data.category);
-
-  if (image) {
-    formData.append("image", image);
-  }
-
-  let result;
-
-  if (editingRecipe) {
-    result = await dispatch(
-      updateRecipeThunk({
-        id: editingRecipe._id,
-        data: formData,
-      })
+    formData.append(
+      "ingredients",
+      JSON.stringify(data.ingredients.split(",").map((item) => item.trim())),
     );
-  } else {
-    result = await dispatch(createRecipeThunk(formData));
-  }
 
+    formData.append("category", data.category);
 
+    if (image) {
+      formData.append("image", image);
+    }
+
+    let result;
+
+    if (editingRecipe) {
+      result = await dispatch(
+        updateRecipeThunk({
+          id: editingRecipe._id,
+          data: formData,
+        }),
+      );
+    } else {
+      result = await dispatch(createRecipeThunk(formData));
+    }
 
     if (
       createRecipeThunk.fulfilled.match(result) ||
       updateRecipeThunk.fulfilled.match(result)
     ) {
-     
       dispatch(
         getRecipesThunk({
           page,
@@ -101,15 +96,14 @@ const Home = () => {
 
       setIsOpen(false);
       setEditingRecipe(null);
- setForm({
-    title: "",
-    description: "",
-    ingredients: "",
-    category: "",
-  });
+      setForm({
+        title: "",
+        description: "",
+        ingredients: "",
+        category: "",
+      });
       setImage(null);
     } else {
-     
     }
   };
 
