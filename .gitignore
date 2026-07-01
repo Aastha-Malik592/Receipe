@@ -1,4 +1,15 @@
-node_modules/
-.env
-dist/
-build/
+# Dependencies
+**/node_modules/
+
+# Environment files
+**/.env
+
+
+# Build outputs
+**/dist/
+**/build/
+**/.next/
+**/coverage/
+
+# Logs
+**/*.log

@@ -12,12 +12,11 @@ import {
   createRecipeThunk,
   updateRecipeThunk,
 } from "../features/recipe/recipe-thunk";
-import toast from "react-hot-toast";
 const Home = () => {
   const dispatch = useDispatch();
 
   const { recipes, loading, totalPages } = useSelector((state) => state.recipe);
- 
+
   const [isOpen, setIsOpen] = useState(false);
 
   const [form, setForm] = useState({
@@ -36,85 +35,83 @@ const Home = () => {
   const limit = 6;
   const [showFavorites, setShowFavorites] = useState(false);
 
-useEffect(() => {
-  dispatch(
-    getRecipesThunk({
-      page,
-      limit,
-      search: debouncedSearch,
-      category,
-      favorites: showFavorites,
-    })
-  );
-}, [dispatch, page, debouncedSearch, category, showFavorites]);
+  useEffect(() => {
+    dispatch(
+      getRecipesThunk({
+        page,
+        limit,
+        search: debouncedSearch,
+        category,
+        favorites: showFavorites,
+      }),
+    );
+  }, [dispatch, page, debouncedSearch, category, showFavorites]);
+
   useEffect(() => {
     setPage(1);
   }, [search, category, showFavorites]);
-const handleSubmitRecipe = async (data) => {
+ const handleSubmitRecipe = async (data) => {
   const formData = new FormData();
 
   formData.append("title", data.title);
   formData.append("description", data.description);
+
   formData.append(
     "ingredients",
     JSON.stringify(
       data.ingredients.split(",").map((item) => item.trim())
     )
   );
+
   formData.append("category", data.category);
 
   if (image) {
     formData.append("image", image);
   }
 
-  
+  let result;
+
+  if (editingRecipe) {
+    result = await dispatch(
+      updateRecipeThunk({
+        id: editingRecipe._id,
+        data: formData,
+      })
+    );
+  } else {
+    result = await dispatch(createRecipeThunk(formData));
+  }
 
 
-  
-
-    let result;
-
-    if (editingRecipe) {
-      result = await dispatch(
-        updateRecipeThunk({
-          id: editingRecipe._id,
-          data: formData,
-        }),
-      );
-    } else {
-      result = await dispatch(createRecipeThunk(formData));
-    }
 
     if (
       createRecipeThunk.fulfilled.match(result) ||
       updateRecipeThunk.fulfilled.match(result)
     ) {
-      toast.success(editingRecipe ? "Recipe Updated" : "Recipe Created");
-
-  dispatch(
-  getRecipesThunk({
-    page,
-    limit,
-    search,
-    category,
-    favorites: showFavorites,
-  })
-);
-
+     
+      dispatch(
+        getRecipesThunk({
+          page,
+          limit,
+          search,
+          category,
+          favorites: showFavorites,
+        }),
+      );
 
       setIsOpen(false);
       setEditingRecipe(null);
-
-    
-
-
+ setForm({
+    title: "",
+    description: "",
+    ingredients: "",
+    category: "",
+  });
       setImage(null);
     } else {
-      toast.error(result.payload);
+     
     }
   };
-
-
 
   return (
     <>
@@ -142,26 +139,25 @@ const handleSubmitRecipe = async (data) => {
             <p>Create, manage and organize your recipes</p>
           </div>
 
-          
- <button
-  className="home-btn"
-  onClick={() => {
-    setEditingRecipe(null);
+          <button
+            className="home-btn"
+            onClick={() => {
+              setEditingRecipe(null);
 
-    setForm({
-      title: "",
-      description: "",
-      ingredients: "",
-      category: "",
-    });
+              setForm({
+                title: "",
+                description: "",
+                ingredients: "",
+                category: "",
+              });
 
-    setImage(null);
+              setImage(null);
 
-    setIsOpen(true);
-  }}
->
-  Create Recipe
-</button>
+              setIsOpen(true);
+            }}
+          >
+            Create Recipe
+          </button>
         </div>
 
         {loading ? (
@@ -192,28 +188,27 @@ const handleSubmitRecipe = async (data) => {
             ))}
           </div>
         )}
-      <div className="pagination">
-  <button
-    className="page-btn"
-    disabled={page === 1}
-    onClick={() => setPage(page - 1)}
-  >
-    ← Previous
-  </button>
+        <div className="pagination">
+          <button
+            className="page-btn"
+            disabled={page === 1}
+            onClick={() => setPage(page - 1)}
+          >
+            ← Previous
+          </button>
 
-  <span className="page-number">
-    {page} / {totalPages}
-  </span>
+          <span className="page-number">
+            {page} / {totalPages}
+          </span>
 
-  <button
-    className="page-btn"
-    disabled={page >= totalPages}
-    onClick={() => setPage(page + 1)}
-  >
-    Next →
-  </button>
-</div>
-    
+          <button
+            className="page-btn"
+            disabled={page >= totalPages}
+            onClick={() => setPage(page + 1)}
+          >
+            Next →
+          </button>
+        </div>
       </div>
 
       <Modal
@@ -235,7 +230,6 @@ const handleSubmitRecipe = async (data) => {
         title={editingRecipe ? "Edit Recipe" : "Create Recipe"}
       >
         <RecipeForm
-        
           form={form}
           setForm={setForm}
           image={image}

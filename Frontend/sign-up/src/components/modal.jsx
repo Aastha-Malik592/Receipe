@@ -8,9 +8,7 @@ const Modal = ({ isOpen, onClose, title, children }) => {
         <Dialog.Overlay className="dialog-overlay" />
 
         <Dialog.Content className="dialog-content">
-          <Dialog.Title className="dialog-title">
-            {title}
-          </Dialog.Title>
+          <Dialog.Title className="dialog-title">{title}</Dialog.Title>
 
           {children}
 

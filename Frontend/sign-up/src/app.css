@@ -138,7 +138,6 @@ body {
   font-weight: bold;
 }
 
-
 @keyframes fade {
   from {
     opacity: 0;
@@ -148,16 +147,6 @@ body {
     opacity: 1;
   }
 }
-
-
-
-
-
-
-
-
-
-
 
 .search-box {
   width: 100%;
@@ -193,9 +182,6 @@ body {
   }
 }
 
-
-
-
 ::-webkit-scrollbar {
   width: 10px;
 }
@@ -205,7 +191,6 @@ body {
 
   border-radius: 10px;
 }
-
 
 .active-btn {
   background: #facc15;
@@ -218,7 +203,6 @@ body {
 .recipe-image {
   position: relative;
 }
-
 
 .favorite-icon {
   position: absolute;
@@ -243,8 +227,6 @@ body {
 .favorite-icon:hover {
   transform: scale(1.1);
 }
-
-
 
 .ingredient-list {
   margin-left: 18px;

@@ -35,14 +35,8 @@ export const getRecipesThunk = createAsyncThunk(
   "recipe/get",
 
   async (
-    {
-      page = 1,
-      limit = 6,
-      search = "",
-      category = "",
-      favorites = false,
-    } = {},
-    { rejectWithValue, getState }
+    { page = 1, limit = 6, search = "", category = "", favorites = false } = {},
+    { rejectWithValue, getState },
   ) => {
     try {
       const response = await axios.get(
@@ -51,19 +45,15 @@ export const getRecipesThunk = createAsyncThunk(
           headers: {
             Authorization: `Bearer ${getToken(getState())}`,
           },
-        }
+        },
       );
 
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message);
     }
-  }
+  },
 );
-
-     
-
-
 
 export const deleteRecipeThunk = createAsyncThunk(
   "recipe/delete",

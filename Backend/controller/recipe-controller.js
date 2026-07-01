@@ -33,23 +33,21 @@ exports.createRecipe = async (req, res) => {
 };
 
 exports.getRecipes = async (req, res) => {
-  
-
   try {
-const {
-  page = 1,
-  limit = 6,
-  search = "",
-  category = "",
-  favorites,
-} = req.query;
+    const {
+      page = 1,
+      limit = 6,
+      search = "",
+      category = "",
+      favorites,
+    } = req.query;
 
     const query = {
       userId: req.user._id,
     };
     if (favorites === "true") {
-  query.isFavorite = true;
-}
+      query.isFavorite = true;
+    }
 
     if (search) {
       query.title = {
@@ -106,8 +104,6 @@ exports.getRecipeById = async (req, res) => {
   }
 };
 
-
-
 exports.updateRecipe = async (req, res) => {
   try {
     const recipe = await Recipe.findOne({
@@ -152,8 +148,6 @@ exports.updateRecipe = async (req, res) => {
   }
 };
 
-
-
 exports.deleteRecipe = async (req, res) => {
   try {
     const recipe = await Recipe.findOneAndDelete({
@@ -177,7 +171,6 @@ exports.deleteRecipe = async (req, res) => {
     });
   }
 };
-
 
 exports.favoriteRecipe = async (req, res) => {
   try {

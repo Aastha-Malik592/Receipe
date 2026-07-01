@@ -22,48 +22,38 @@ const RecipeCard = ({ recipe, onEdit }) => {
     }
   };
 
-  
- const handleFavorite = async () => {
-  const result = await dispatch(
-    favoriteRecipeThunk(recipe._id)
-  );
+  const handleFavorite = async () => {
+    const result = await dispatch(favoriteRecipeThunk(recipe._id));
 
-  console.log("Favorite Result:", result);
-  console.log("Payload:", result.payload);
-console.log(
-  "isFavorite:",
-  result.payload.recipe.isFavorite
-);
+    console.log("Favorite Result:", result);
+    console.log("Payload:", result.payload);
+    console.log("isFavorite:", result.payload.recipe.isFavorite);
 
- if (favoriteRecipeThunk.fulfilled.match(result)) {
-  toast.success("Favorite Updated");
-}
-  else {
-    toast.error(result.payload);
-  }
-};
-console.log(recipe.image);
-console.log(recipe)
+    if (favoriteRecipeThunk.fulfilled.match(result)) {
+      toast.success("Favorite Updated");
+    } else {
+      toast.error(result.payload);
+    }
+  };
+  console.log(recipe.image);
+  console.log(recipe);
   return (
     <div className="recipe-card">
-    <div className="recipe-image">
-  {recipe.image ? (
-    <img
-       src={`${apiUrl}/${recipe.image}`}
-      alt={recipe.title}
-      className="recipe-img"
-    />
-  ) : (
-    <div className="image-placeholder">No Image</div>
-  )}
+      <div className="recipe-image">
+        {recipe.image ? (
+          <img
+            src={`${apiUrl}/${recipe.image}`}
+            alt={recipe.title}
+            className="recipe-img"
+          />
+        ) : (
+          <div className="image-placeholder">No Image</div>
+        )}
 
-  <button
-    className="favorite-icon"
-    onClick={handleFavorite}
-  >
-    {recipe.isFavorite ? "❤️" : "🤍"}
-  </button>
-</div>
+        <button className="favorite-icon" onClick={handleFavorite}>
+          {recipe.isFavorite ? "❤️" : "🤍"}
+        </button>
+      </div>
 
       <div className="recipe-content">
         <h3>{recipe.title}</h3>
